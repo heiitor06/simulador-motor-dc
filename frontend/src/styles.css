@@ -1,0 +1,139 @@
+:root { color-scheme: dark; font-family: 'Segoe UI', Arial, sans-serif; background: #050b12; color: #dce9ed; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh;
+  background: linear-gradient(rgba(3, 9, 16, .22), rgba(3, 9, 16, .5)),
+    url('/industrial-background.png') center / cover fixed; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.app-shell { width: min(1800px, 100%); margin: auto; padding: 18px 22px 28px; }
+.cabecalho { min-height: 112px; display: grid; grid-template-columns: 245px minmax(0, 1fr) 245px; gap: 18px; align-items: start; padding: 8px 0 22px; }
+.identidade { grid-column: 2; text-align: center; }
+.sobretitulo { color: #7a9fbf; font: 600 10px 'Cascadia Code', Consolas, monospace; letter-spacing: .16em; }
+h1 { margin: 10px 0 8px; color: #e4f3ff; font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: clamp(22px, 2.2vw, 34px); font-weight: 600; letter-spacing: .055em; line-height: 1.2; text-transform: uppercase; text-shadow: 0 0 24px rgba(90, 179, 247, .2); }
+.cabecalho p { margin: 0; color: #6f909e; font-size: 12px; }
+.formula-topo { display: grid; gap: 2px; min-width: 245px; padding: 10px 15px; border: 1px solid #2c4d6a;
+  background: rgba(12, 28, 45, .9); border-radius: 8px; box-shadow: 0 0 35px rgba(35, 214, 205, .06); }
+.formula-topo span { color: #7faaca; font: 600 9px 'Cascadia Code', Consolas, monospace; letter-spacing: .12em; }
+.formula-topo code { color: #b6dcff; font: 11px 'Cascadia Code', Consolas, monospace; }
+.dashboard { display: grid; grid-template-columns: 282px minmax(560px, 1fr) 230px; gap: 12px; align-items: start; }
+.painel { border: 1px solid #263d52; background: rgba(9, 19, 30, .91); border-radius: 9px; }
+.controles { padding: 13px; min-height: 690px; }
+.titulo-painel, .cena-cabecalho { display: flex; align-items: center; justify-content: space-between; }
+.titulo-painel span { color: #acc3ca; font: 600 11px 'Cascadia Code', Consolas, monospace; letter-spacing: .1em; }
+.titulo-painel i { width: 27px; height: 27px; display: grid; place-items: center; border: 1px solid #24596a;
+  border-radius: 50%; color: #5ac9cd; font: normal 10px 'Cascadia Code', Consolas, monospace; }
+.estado-edicao { display: flex; align-items: center; gap: 7px; margin: 11px 0 3px; padding: 7px 8px;
+  border: 1px solid rgba(86, 169, 239, .3); border-radius: 4px; background: rgba(50, 120, 190, .1);
+  color: #8bc5f3; font: 600 7px 'Cascadia Code', Consolas, monospace; letter-spacing: .06em; }
+.estado-edicao i { width: 6px; height: 6px; flex: 0 0 auto; border-radius: 50%; background: #69bafa; box-shadow: 0 0 7px #69bafa; }
+.estado-edicao.bloqueado { color: #d0a063; border-color: rgba(217, 151, 68, .22); background: rgba(126, 81, 30, .08); }
+.estado-edicao.bloqueado i { background: #e0a256; box-shadow: 0 0 7px #e0a256; }
+details { border-top: 1px solid #17313c; margin-top: 12px; padding-top: 6px; }
+summary { list-style: none; color: #87bce4; font-size: 11px; cursor: pointer; padding: 5px 1px 7px; }
+summary::before { content: '＋'; margin-right: 7px; color: #437b88; }
+details[open] summary::before { content: '−'; }
+.campo { display: grid; grid-template-columns: 1fr 87px; align-items: center; gap: 8px; margin: 6px 0; }
+.campo > span { color: #b2c4ca; font-size: 10px; line-height: 1.25; }
+.campo small { display: block; color: #819bb1; font: 8px 'Cascadia Code', Consolas, monospace; margin-top: 1px; }
+.campo input, .campo select { width: 100%; border: 1px solid #254655; border-radius: 4px; background: #07121a;
+  color: #d9edef; padding: 6px 7px; outline: none; font: 10px 'Cascadia Code', Consolas, monospace; }
+.campo input:focus, .campo select:focus { border-color: #58b6f5; box-shadow: 0 0 0 2px rgba(75,200,200,.08); }
+.campo input:disabled, .campo select:disabled { opacity: .55; }
+.acoes { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 12px; }
+.acoes button { border: 1px solid #234452; border-radius: 5px; background: #122937; color: #a9c0c8;
+  padding: 9px 5px; font: 600 9px 'Cascadia Code', Consolas, monospace; }
+.acoes .iniciar { grid-column: 1 / -1; background: #58b5f5; border-color: #58b5f5; color: #061525; }
+.acoes .padrao { grid-column: 1 / -1; background: transparent; border-style: dashed; color: #6d929d; }
+.acoes button:hover:not(:disabled) { filter: brightness(1.14); }
+.acoes button:disabled { opacity: .35; cursor: default; }
+.erro { color: #ff8e8e; font-size: 10px; line-height: 1.4; }
+.area-central { min-width: 0; }
+.cena { position: relative; height: 510px; overflow: hidden; isolation: isolate;
+  background: linear-gradient(rgba(4, 12, 22, .18), rgba(4, 12, 22, .22)),
+    url('/industrial-background.png') center / cover; }
+.cena::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: url('/engineering-details.png') center / cover; opacity: .11;
+  mask-image: linear-gradient(110deg, #000, transparent 48%, #000); }
+.cena::after { content: ''; position: absolute; inset: 0; pointer-events: none; background:
+  linear-gradient(90deg, rgba(3,8,13,.3), transparent 20%, transparent 80%, rgba(3,8,13,.35)),
+  radial-gradient(circle at 50% 48%, transparent 35%, rgba(3,8,13,.28)); }
+.cena canvas { width: 100% !important; height: 100% !important; }
+.cena-cabecalho { position: absolute; z-index: 3; left: 16px; right: 16px; top: 13px; pointer-events: none; }
+.cena-cabecalho > div:first-child { display: grid; gap: 3px; }
+.cena-cabecalho span { color: #87abc8; font: 600 8px 'Cascadia Code', Consolas, monospace; letter-spacing: .12em; }
+.cena-cabecalho strong { color: #b9d0d6; font: 500 11px 'Cascadia Code', Consolas, monospace; }
+.status { display: flex; align-items: center; gap: 7px; color: #6f9ba6; font: 600 8px 'Cascadia Code', Consolas, monospace; letter-spacing: .08em; }
+.status i { width: 7px; height: 7px; border-radius: 50%; background: #6f9ba6; }
+.status.simulando, .status.concluido { color: #8bcaff; }
+.status.simulando i, .status.concluido i { background: #8bcaff; box-shadow: 0 0 12px #4baff5; }
+.status.erro { color: #ff8888; }.status.erro i { background: #ff7272; }
+.legenda-cena { position: absolute; bottom: 12px; z-index: 3; color: #89a5bd; font: 8px 'Cascadia Code', Consolas, monospace; }
+.legenda-cena.esquerda { left: 16px; }.legenda-cena.direita { right: 16px; }
+.ponto { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
+.ponto.cobre { background: #ed8a44; box-shadow: 0 0 8px #ed8a44; }
+.fluxo-label { position: absolute; z-index: 3; right: 18px; top: 70px; display: grid; gap: 4px; padding: 9px 12px;
+  background: rgba(5,15,22,.7); border-left: 2px solid #58b6f5; }
+.fluxo-label span { color: #528692; font: 8px 'Cascadia Code', Consolas, monospace; }.fluxo-label strong { color: #c1e4ff; font: 15px 'Cascadia Code', Consolas, monospace; }
+.etiqueta-3d { white-space: nowrap; color: #b0d8fa; background: rgba(5,15,22,.78); border: 1px solid rgba(76,190,190,.35);
+  padding: 4px 7px; border-radius: 3px; font: 8px 'Cascadia Code', Consolas, monospace; pointer-events: none; }
+.etiqueta-3d.saida { color: #f2b27b; border-color: rgba(238,140,67,.35); }
+.abas { display: flex; border-bottom: 1px solid #263d52; margin-top: 10px; overflow-x: auto; }
+.abas button { border: 0; border-bottom: 2px solid transparent; background: transparent; color: #678895; padding: 11px 16px;
+  white-space: nowrap; font: 600 9px 'Cascadia Code', Consolas, monospace; }
+.abas button.ativa { color: #9cd4ff; border-color: #51aaf0; background: rgba(49,112,174,.16); }
+.conteudo-aba { min-height: 280px; padding-top: 10px; }
+.grade-graficos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grafico-card { border: 1px solid #263d52; border-radius: 7px; background: #09141c; padding: 9px; overflow: hidden; }
+.grafico-card header { display: flex; justify-content: space-between; padding: 1px 6px 5px; }
+.grafico-card header span { color: #668894; font: 600 9px 'Cascadia Code', Consolas, monospace; }
+.grafico-card header strong { color: #c4d9de; font: 500 10px 'Cascadia Code', Consolas, monospace; }
+.grafico-card svg { width: 100%; display: block; overflow: visible; }
+.grafico-card svg text { fill: #66828e; font: 10px 'Cascadia Code', Consolas, monospace; }
+.grafico-card .grade { stroke: #1b3540; stroke-width: 1; }.grafico-card .grade.vertical { opacity: .55; }
+.grafico-card .equilibrio { stroke: #e3a15b; stroke-width: 1.4; stroke-dasharray: 7 5; }
+.grafico-card .texto-equilibrio { fill: #e6ad70; font-size: 9px; }
+.grafico-card .eixo-zero { stroke: #507783; stroke-width: 1.2; }
+.plano-card svg { max-height: 390px; }
+.modelo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modelo > div { padding: 18px; border: 1px solid #263d52; border-radius: 7px; background: #09141c; }
+.modelo span { display: block; color: #5f8c98; font: 600 9px 'Cascadia Code', Consolas, monospace; letter-spacing: .08em; margin-bottom: 12px; }
+.modelo strong { color: #c2e2ff; font: 500 14px 'Cascadia Code', Consolas, monospace; }.modelo p { color: #89a4ae; font-size: 12px; line-height: 1.6; }
+.modelo .homogenea { grid-column: 1 / -1; border-left: 2px solid #5daef0; }
+.tabela-wrap { border: 1px solid #263d52; border-radius: 7px; overflow: auto; max-height: 410px; }
+table { width: 100%; border-collapse: collapse; font: 10px 'Cascadia Code', Consolas, monospace; }
+th { position: sticky; top: 0; background: #102632; color: #6e98a4; text-align: left; padding: 10px; }
+td { color: #afc7ce; padding: 9px 10px; border-top: 1px solid #16313b; }
+.telemetria { display: grid; gap: 9px; }
+.metrica { position: relative; min-height: 105px; padding: 13px; border: 1px solid #263d52; border-radius: 8px;
+  background: rgba(9,19,30,.91); overflow: hidden; }
+.metrica::before { content: ''; position: absolute; left: 0; top: 16px; width: 2px; height: 27px; background: #397b88; }
+.metrica.destaque::before { background: #5eb9fa; box-shadow: 0 0 10px #5eb9fa; }
+.metrica > span, .equilibrio-card > span, .explicacao > span { display: block; color: #608894; font: 600 8px 'Cascadia Code', Consolas, monospace; letter-spacing: .08em; }
+.metrica strong { display: inline-block; margin-top: 17px; color: #f0f8f8; font: 600 25px 'Cascadia Code', Consolas, monospace; letter-spacing: -.05em; }
+.metrica small { margin-left: 6px; color: #6d9ca6; font: 9px 'Cascadia Code', Consolas, monospace; }
+.barra { position: absolute; left: 13px; right: 13px; bottom: 12px; height: 2px; background: #172f38; }
+.barra i { display: block; height: 100%; background: #59b6f7; box-shadow: 0 0 8px #59b6f7; transition: width .2s; }
+.equilibrio-card, .explicacao { padding: 14px; }.equilibrio-card dl { margin: 12px 0 0; }
+.equilibrio-card dl div { display: flex; justify-content: space-between; padding: 7px 0; border-top: 1px solid #19333e; }
+.equilibrio-card dt { color: #6d8994; font-size: 9px; }.equilibrio-card dd { margin: 0; color: #bbd7ed; font: 9px 'Cascadia Code', Consolas, monospace; }
+.explicacao p { color: #96adb5; font-size: 10px; line-height: 1.55; margin: 10px 0 0; }
+
+@media (max-width: 1200px) {
+  .cabecalho { grid-template-columns: 1fr; justify-items: center; gap: 12px; }
+  .identidade { grid-column: 1; }
+  .dashboard { grid-template-columns: 260px minmax(500px, 1fr); }
+  .telemetria { grid-column: 1 / -1; grid-template-columns: repeat(4, 1fr); }
+  .equilibrio-card, .explicacao { grid-column: span 2; }
+}
+@media (max-width: 850px) {
+  .app-shell { padding: 12px; }.cabecalho { height: auto; margin-bottom: 14px; }.formula-topo { display: none; }
+  .dashboard { display: block; }.controles { min-height: 0; margin-bottom: 10px; }
+  .cena { height: 430px; }.telemetria { margin-top: 12px; grid-template-columns: 1fr 1fr; }
+  .grade-graficos, .modelo { grid-template-columns: 1fr; }.modelo .homogenea { grid-column: auto; }
+}
+
+
+/* Superficies de aço escuro e luz azul, com contraste para os controles. */
+.painel, .metrica { box-shadow: 0 10px 30px rgba(0, 0, 0, .2), inset 0 1px rgba(164, 202, 234, .035); }
+.acoes .iniciar { background: linear-gradient(135deg, #84ceff, #4098df); box-shadow: 0 3px 16px rgba(45, 140, 225, .18); }
+button:focus-visible, summary:focus-visible { outline: 2px solid #9ad6ff; outline-offset: 3px; }

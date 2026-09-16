@@ -1,0 +1,10 @@
+.venv/
+.matplotlib-cache/
+__pycache__/
+*.pyc
+preview-*.png
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts

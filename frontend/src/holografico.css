@@ -1,0 +1,95 @@
+/* Um ambiente contínuo; os painéis são superfícies de vidro sobre o cenário. */
+/* Translate preserva a perspectiva existente e não desloca os outros elementos. */
+@keyframes flutuar-painel {
+  0%, 100% { translate: -2px 13px; rotate: -.5deg; }
+  50% { translate: 2px -13px; rotate: .5deg; }
+}
+.controles, .telemetria { animation: flutuar-painel 5s ease-in-out infinite; }
+.telemetria { animation-duration: 5.8s; animation-delay: -2.5s; }
+.controles:hover, .controles:focus-within,
+.telemetria:hover, .telemetria:focus-within { animation-play-state: paused; }
+/* O controle explícito permite ligar ou pausar o efeito sem mudar o navegador. */
+.sem-flutuacao .controles, .sem-flutuacao .telemetria { animation-play-state: paused; }
+.acoes .alternar-flutuacao { font-size: 9px; }
+body { background: radial-gradient(ellipse at 50% 35%, #13355455, transparent 58%), linear-gradient(#02081133, #02081155), url('/industrial-background.png') center / cover fixed; }
+.app-shell { max-width: 1700px; padding: 24px 32px 40px; }
+.cabecalho { display: block; min-height: 0; padding: 0 0 12px; margin: 0; }
+.identidade { text-align: center; }
+.sobretitulo { color: #9ebed8; font-size: 9px; letter-spacing: .25em; }
+h1 { font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: clamp(28px, 3.5vw, 53px); font-weight: 600; line-height: 1.04; letter-spacing: .075em; margin: 12px 0; color: transparent; background: linear-gradient(#fff 0%, #cce6fa 22%, #507695 43%, #071d33 48%, #e4f6ff 54%, #8fbcd9 72%, #fff 82%, #376582 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-stroke: .6px #b2dcf5; filter: drop-shadow(0 2px 1px #071623) drop-shadow(0 0 9px #5baefe66); text-shadow: none; }
+.cabecalho p { color: #8ca8bf; font-size: 11px; }
+.dashboard { display: grid; grid-template-columns: 270px minmax(0, 1fr) 255px; gap: 20px; align-items: center; }
+.area-central { display: contents; }
+.painel, .grafico-card, .modelo > div, .tabela-wrap { border: 1px solid #65bbf5aa; background: linear-gradient(125deg, #224d7455, #07162c99 60%, #1b497355); border-radius: 15px; box-shadow: inset 0 0 0 3px #73c3ff08, inset 0 1px 14px #72c4ff12, 0 0 12px #389eec29, 0 18px 36px #0006; backdrop-filter: blur(10px); }
+.controles { grid-column: 1; grid-row: 1; min-height: 0; padding: 18px; transform: perspective(1100px) rotateY(5deg); transform-origin: right center; }
+.titulo-painel { padding-bottom: 10px; border-bottom: 1px solid #71c2ff55; }
+.titulo-painel span { font: 500 16px 'Bahnschrift', 'Segoe UI', sans-serif; color: #c2e7ff; letter-spacing: .06em; }
+.titulo-painel i { color: #9edbff; border-color: #72bbef66; }
+.campo { grid-template-columns: minmax(0, 1fr) 91px; margin: 11px 0; }
+.campo > span { font-size: 12px; color: #c8ddeb; }
+.campo small { color: #8db1cf; font-size: 9px; }
+.campo input, .campo select { min-height: 34px; font-size: 12px; background: #112b485c; border-color: #629fc080; border-radius: 5px; color: #edf8ff; }
+.campo input:focus, .campo select:focus { border-color: #b6e8ff; box-shadow: 0 0 12px #4bb4ff44; }
+select option { background: #102437; }
+summary { color: #b3d9f7; font-size: 12px; padding-top: 9px; }
+details { border-color: #6cb5ee33; }
+.cena.painel { grid-column: 2; grid-row: 1; height: 490px; border: 0; border-radius: 0; background: transparent; box-shadow: none; backdrop-filter: none; overflow: hidden; }
+.cena::before, .cena::after { display: none; }
+.cena-cabecalho { top: 8px; justify-content: center; }
+.cena-cabecalho > div:first-child { display: none; }
+.status { font-size: 9px; color: #b4d6ef; }
+.fluxo-label { top: auto; bottom: 48px; right: 14px; background: #112c4366; border-color: #80ceff; }
+.legenda-cena { font-size: 8px; color: #acd0e9; }
+.telemetria { grid-column: 3; grid-row: 1; display: block; padding: 18px; margin: 0; transform: perspective(1100px) rotateY(-5deg); transform-origin: left center; }
+.metrica { min-height: 72px; padding: 13px 0; border: 0; border-bottom: 1px solid #70b2e033; background: transparent; border-radius: 0; box-shadow: none; }
+.metrica::before { display: none; }
+.metrica > span { color: #9cc4e2; font-size: 9px; }
+.metrica strong { font: 500 27px 'Bahnschrift', sans-serif; color: #d6f0ff; margin-top: 7px; text-shadow: 0 0 15px #76c7ff44; }
+.metrica small { color: #b3d7f0; }
+.barra { bottom: 4px; left: 0; right: 0; }
+.telemetria .equilibrio-card, .telemetria .explicacao { padding: 12px 0 0; border: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
+.equilibrio-card dl { margin-top: 5px; }
+.equilibrio-card dl div { padding: 4px 0; }
+.equilibrio-card dt, .explicacao p { color: #a9c2d5; }
+.dock-holografico { grid-column: 1 / -1; grid-row: 2; justify-self: center; width: min(100%, 1060px); display: flex; align-items: center; flex-wrap: wrap; gap: 18px; padding: 13px 20px; }
+.acoes { display: flex; flex: 1; flex-wrap: wrap; margin: 0; gap: 8px; }
+.acoes button { min-height: 38px; padding: 9px 16px; border: 1px solid #66b9f4aa; background: linear-gradient(#1e4f7980, #102f4d80); color: #d5eeff; font-size: 11px; box-shadow: inset 0 0 10px #509ff322; }
+.acoes .iniciar { background: linear-gradient(#187d8577, #105f6588); color: #eaffff; border-color: #66e6e1; box-shadow: 0 0 10px #5affdd22; }
+.acoes .padrao { font-size: 8px; color: #a2c9e5; padding: 7px; }
+.campos-dock { display: flex; gap: 18px; }
+.campos-dock .campo { gap: 10px; grid-template-columns: auto 78px; margin: 0; }
+.dock-holografico .erro { flex-basis: 100%; margin: 0; }
+.resultados-holograficos { grid-column: 1 / -1; grid-row: 3; width: min(100%, 1060px); justify-self: center; min-width: 0; }
+.abas { justify-content: center; margin: 0 0 8px; border-color: #68bafa44; }
+.abas button { color: #a6c9e2; }
+.conteudo-aba { min-height: 0; padding: 0; }
+.grafico-card { padding: 14px; }
+.grafico-card header span, .grafico-card svg text { color: #abc7db; fill: #abc7db; }
+.modelo strong { overflow-wrap: anywhere; }
+@media (max-width: 1100px) {
+  .app-shell { padding: 20px 18px; }
+  .dashboard { grid-template-columns: 230px minmax(0, 1fr) 210px; gap: 12px; }
+  .controles, .telemetria { padding: 12px; transform: none; }
+  .cena.painel { height: 440px; }
+  .legenda-cena.esquerda { display: none; }
+}
+@media (max-width: 850px) {
+  .dashboard { grid-template-columns: 1fr 1fr; }
+  .cena.painel { grid-column: 1 / -1; grid-row: 1; height: 390px; }
+  .controles { grid-column: 1; grid-row: 3; margin: 0; align-self: start; }
+  .telemetria { grid-column: 2; grid-row: 3; align-self: start; }
+  .dock-holografico { grid-row: 2; }
+  .resultados-holograficos { grid-row: 4; }
+  .grade-graficos { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .app-shell { padding: 16px 12px; }
+  h1 { font-size: 26px; }
+  .dashboard { grid-template-columns: 1fr; }
+  .controles, .telemetria { grid-column: 1; }
+  .telemetria { grid-row: 4; }
+  .resultados-holograficos { grid-row: 5; }
+  .dock-holografico { padding: 12px; }
+  .campos-dock { flex-wrap: wrap; }
+  .abas { justify-content: start; }
+}
