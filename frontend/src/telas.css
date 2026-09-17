@@ -1,0 +1,139 @@
+/* Navegação e explicação compartilham o experimento mantido em App. */
+[hidden] { display: none !important; }
+.cabecalho h1 { font-size: clamp(24px, 2.7vw, 40px); }
+.telas-navegacao { display: flex; justify-content: center; gap: 10px; margin: 14px auto 18px; }
+.telas-navegacao button { display: flex; align-items: center; gap: 13px; width: 310px; padding: 13px 18px; text-align: left; color: #9ebbd0; background: #0a1b2ad9; border: 1px solid #49677b; border-radius: 10px; }
+.telas-navegacao button > span { font: 21px 'Bahnschrift', sans-serif; color: #5485a5; }
+.telas-navegacao button div { font: 16px 'Bahnschrift', sans-serif; }
+.telas-navegacao small { display: block; margin-top: 4px; font: 10px 'Segoe UI', sans-serif; }
+.telas-navegacao [aria-selected=true] { border-color: #82d6ff; background: linear-gradient(110deg,#184660e6,#0c243ae6); color: #e6f7ff; box-shadow: 0 0 20px #55bfff20; }
+.telas-navegacao [aria-selected=true] > span { color: #85e1fa; }
+.simulacao-compartilhada { margin: 0 auto 22px; width: 100%; max-width: 1280px; gap: 12px; }
+.simulacao-compartilhada .acoes button { padding: 8px 10px; }
+.tempo-compartilhado { flex-basis: 100%; display: flex; align-items: center; gap: 18px; border-top: 1px solid #49748b55; padding-top: 10px; }
+.tempo-compartilhado label { flex: 1; display: flex; align-items: center; gap: 12px; color: #bdd8e9; font-size: 11px; }
+.tempo-compartilhado input { min-width: 60px; flex: 1; accent-color: #7ce1ff; }
+.tempo-compartilhado output { min-width: 48px; font-variant-numeric: tabular-nums; }
+.tempo-compartilhado small { font-size: 9px; color: #83a5bd; }
+.energia-resumo { grid-column: 1 / -1; grid-row: 2; width: min(100%, 1100px); justify-self: center; padding: 20px 25px; }
+.energia-cabecalho { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.energia-cabecalho > span:last-child { color: #8daabd; font-size: 10px; }
+.energia-caminho { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 18px; margin: 22px 0 18px; }
+.energia-caminho div { display: grid; gap: 9px; }
+.energia-caminho div > span { font-size: 11px; color: #99c0da; }
+.energia-caminho strong { font: 29px 'Bahnschrift', sans-serif; color: #d9f7ff; }
+.energia-caminho small { font-size: 14px; color: #8bbcd0; }
+.energia-caminho code { font-size: 11px; color: #a7c5d7; }
+.energia-caminho b { color: #6be0ff; font-size: 24px; font-weight: 400; }
+.energia-resumo p { color: #a9c9dc; font-size: 12px; line-height: 1.6; }
+.energia-resumo > small { color: #7897ad; font-size: 10px; }
+.energia-resumo .energia-nota { color: #ecc697; }
+.ponte-edo { grid-column: 1 / -1; justify-self: center; padding: 15px 25px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; background: #0c293ccc; color: #b4d0e1; border: 1px solid #4c9dc0; border-radius: 10px; font-size: 12px; }
+.ponte-edo span { color: #86e0fb; }
+.explorador-edo { max-width: 1320px; margin: auto; }
+.edo-abertura { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin: 25px 0 20px; }
+.edo-abertura h2 { font: 500 clamp(23px, 2.5vw, 34px) 'Bahnschrift', sans-serif; color: #deefff; margin: 7px 0 0; }
+.botao-guia, .edo-navegacao button { border: 1px solid #63c6e7; border-radius: 7px; background: #10374be6; color: #c1f2ff; padding: 12px 17px; font-size: 12px; }
+.etapas-edo { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
+.etapas-edo button { padding: 12px 10px; display: flex; align-items: center; gap: 10px; border: 1px solid #325269; background: #091a29e6; border-radius: 8px; color: #9bbdd3; text-align: left; font-size: 12px; }
+.etapas-edo b { display: grid; place-items: center; width: 27px; height: 27px; flex: 0 0 auto; border: 1px solid #4f89ac; border-radius: 50%; font: 15px 'Bahnschrift', sans-serif; }
+.etapas-edo [aria-current=step] { border-color: #7ddeff; color: #d9f6ff; background: #16465ed9; }
+.etapas-edo [aria-current=step] b { background: #8ae7ff; color: #092538; box-shadow: 0 0 16px #6adfff70; }
+.edo-palco { display: grid; grid-template-columns: minmax(270px, .8fr) minmax(0, 1.35fr); gap: 20px; align-items: stretch; }
+.edo-historia { padding: 27px; }
+.edo-numero { font: 36px 'Bahnschrift', sans-serif; color: #78d9f8; }
+.edo-numero small { font-size: 12px; color: #6f96b1; }
+.edo-historia h3 { color: #e4f4ff; font: 500 25px 'Bahnschrift', sans-serif; margin: 16px 0 12px; }
+.edo-historia p { color: #b0c9da; font-size: 13px; line-height: 1.7; }
+.edo-formulas-etapa { margin: 22px 0; padding: 18px 15px; background: #081c2a9e; border-left: 2px solid #6de0ff; border-radius: 0 9px 9px 0; }
+.edo-formulas-etapa code { display: block; color: #d0f2fc; margin-bottom: 10px; font: 13px Consolas, monospace; overflow-wrap: anywhere; }
+.edo-formulas-etapa small { display: block; color: #87aec5; font-size: 11px; line-height: 1.6; }
+.edo-formulas-etapa hr { border: 0; border-top: 1px solid #43678366; margin: 17px 0; }
+.edo-equilibrio, .edo-inclinacoes { display: flex; gap: 20px; flex-wrap: wrap; margin: 14px 0; font-size: 11px; }
+.edo-equilibrio strong, .edo-inclinacoes strong { display: block; color: #ffd09b; font: 20px 'Bahnschrift', sans-serif; margin-top: 6px; }
+.edo-inclinacoes strong { color: inherit; }
+.edo-fala { border-top: 1px solid #42677e77; padding-top: 15px; }
+.edo-fala > span { color: #7ba3bd; font-size: 9px; letter-spacing: .1em; }
+.edo-fala p { font-size: 12px; color: #c0d7e6; }
+.edo-grafico { padding: 21px 18px; min-width: 0; background: radial-gradient(ellipse at 70% 40%,#11557035,transparent 60%),#071827e6; }
+.edo-grafico header { display: flex; justify-content: space-between; gap: 10px; padding: 0 5px 12px; color: #a5cde6; font-size: 10px; letter-spacing: .07em; }
+.edo-grafico header b { white-space: nowrap; font-weight: 400; color: #8ee3ff; }
+.edo-grafico svg { width: 100%; height: auto; overflow: visible; }
+.edo-grafico svg text { fill: #a5c3d8; font: 12px 'Segoe UI', sans-serif; }
+.edo-grade { stroke: #36526b55; stroke-width: 1; }
+.edo-eixo { stroke: #b1daebbb; stroke-width: 1.3; }
+.edo-campo-segmento { stroke: #66aacd55; stroke-width: 1.2; }
+.edo-raio { stroke: #64d7f3; stroke-width: 1.2; stroke-dasharray: 6 6; }
+.edo-grafico svg .edo-texto-dourado { fill: #ffcf99; }
+.edo-leitura { padding: 15px; border-top: 1px solid #395b7477; color: #9cbcd0; display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: 12px; }
+.edo-leitura p { flex-basis: 100%; font-size: 11px; line-height: 1.6; margin: 0; color: #bcd5e5; }
+.edo-interacao { border-top: 1px solid #395b7477; padding: 17px 10px 0; }
+.edo-escala { display: flex; align-items: center; gap: 15px; font-size: 14px; color: #d9effa; }
+.edo-escala input { flex: 1; width: 80px; accent-color: #74dcf8; }
+.edo-escala output { min-width: 50px; padding: 7px; text-align: center; border: 1px solid #4d7993; border-radius: 6px; }
+.edo-razao { color: #add6e7; text-align: center; font: 12px Consolas, monospace; margin: 17px 0; }
+.edo-coordenadas { text-align: center; color: #a6c5d9; font-size: 11px; }
+.edo-interacao details label { display: flex; gap: 12px; align-items: center; font-size: 11px; padding: 7px 0; color: #b3cddd; }
+.edo-interacao details input { flex: 1; width: 60px; accent-color: #70cbe8; }
+.edo-interacao details output { width: 32px; }
+.edo-legenda { font-size: 10px; color: #8eafc6; line-height: 1.7; }
+.edo-legenda i { font-style: normal; margin-right: 12px; }
+.p-ciano { color: #67e4ff; }
+.p-dourado { color: #ffc381; }
+.edo-aviso, .edo-invalida { color: #eccb9c; font-size: 12px; line-height: 1.6; }
+.edo-invalida { padding: 25px; }
+.edo-equacao-final { padding: 22px 26px; margin-top: 20px; }
+.edo-equacao-final > strong { display: block; font: 20px 'Cambria Math', Cambria, serif; line-height: 1.7; color: #dff3ff; margin-top: 10px; overflow-wrap: anywhere; }
+.edo-equacao-final em { display: inline-block; color: #88e6fa; font-style: normal; }
+.edo-equacao-final p { color: #a8c5d7; font-size: 12px; line-height: 1.6; }
+.edo-equacao-final code { color: #efd0a8; font-size: 14px; }
+.edo-navegacao { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin: 20px 0; }
+.edo-navegacao span { color: #87a9bf; font-size: 11px; }
+.edo-navegacao button:disabled { opacity: .35; cursor: default; }
+.titulo-analise { text-align: center; font: 20px 'Bahnschrift', sans-serif; color: #c7dfef; margin: 38px 0 16px; }
+#tela-edo .resultados-holograficos { margin: auto; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid #b1eaff; outline-offset: 3px; }
+@media (max-width: 1000px) {
+  .tempo-compartilhado { flex-wrap: wrap; gap: 12px; }
+  .tempo-compartilhado small { display: none; }
+  .edo-palco { grid-template-columns: minmax(230px,.85fr) minmax(0,1.25fr); gap: 12px; }
+  .edo-historia { padding: 20px; }
+  .edo-historia h3 { font-size: 22px; }
+  .etapas-edo button { flex-direction: column; text-align: center; }
+}
+@media (max-width: 850px) {
+  .tela-energia .controles { grid-row: 2; }
+  .tela-energia .telemetria { grid-row: 2; }
+  .energia-resumo { grid-row: 3; }
+  .ponte-edo { grid-row: 4; }
+}
+@media (max-width: 700px) {
+  .edo-palco { grid-template-columns: 1fr; }
+  .edo-grafico { grid-row: 1; padding: 16px 10px; }
+  .edo-abertura { align-items: start; flex-wrap: wrap; }
+  .etapas-edo { gap: 4px; }
+  .etapas-edo button { font-size: 10px; padding: 9px 3px; }
+  .etapas-edo b { width: 23px; height: 23px; font-size: 12px; }
+  .telas-navegacao button { padding: 11px; gap: 8px; }
+  .telas-navegacao button div { font-size: 14px; }
+  .telas-navegacao small { display: none; }
+  .tempo-compartilhado label { min-width: 100%; }
+  .energia-caminho { gap: 10px; }
+  .energia-caminho strong { font-size: 22px; }
+  .energia-caminho div > span { font-size: 10px; }
+  .energia-caminho code { font-size: 9px; }
+  .edo-navegacao { flex-wrap: wrap; }
+  .edo-navegacao span { order: 3; flex-basis: 100%; text-align: center; }
+}
+@media (max-width: 480px) {
+  .tela-energia .telemetria { grid-row: 3; }
+  .energia-resumo { grid-row: 4; padding: 18px; }
+  .ponte-edo { grid-row: 5; }
+  .energia-caminho { grid-template-columns: 1fr; text-align: center; }
+  .energia-caminho b { transform: rotate(90deg); }
+  .edo-equacao-final { padding: 18px; }
+  .edo-equacao-final > strong { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .controles, .telemetria { animation: none; }
+}

@@ -1,6 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { simularMotor } from './api'
 import Motor3D from './components/Motor3D'
+import EnergiaMotor from './components/EnergiaMotor'
+import ExploradorEDO from './components/ExploradorEDO'
+import ComparacaoCargas from './components/ComparacaoCargas'
 import { GraficoTemporal, PlanoEstados } from './components/Graficos'
 import type { Equilibrio, Parametros, Ponto, Resultado, VelocidadeVisual } from './types'
 
@@ -27,7 +30,7 @@ const equilibrioPadrao: Equilibrio = {
 }
 
 type Status = 'pronto' | 'calculando' | 'simulando' | 'pausado' | 'concluido' | 'erro'
-type Aba = 'graficos' | 'plano' | 'modelo' | 'dados'
+type Aba = 'graficos' | 'plano' | 'modelo' | 'dados' | 'comparacao'
 
 function Campo({ rotulo, unidade, valor, passo, onChange, disabled = false }: {
   rotulo: string; unidade?: string; valor: number; passo: number
@@ -52,6 +55,8 @@ function App() {
   const [indice, setIndice] = useState(0)
   const [status, setStatus] = useState<Status>('pronto')
   const [velocidadeVisual, setVelocidadeVisual] = useState<VelocidadeVisual>('Normal')
+  const [tela, setTela] = useState<'energia' | 'edo'>('energia')
+  const requisicao = useRef(0)
   const [aba, setAba] = useState<Aba>('graficos')
   const [erro, setErro] = useState('')
   const [flutuacao, setFlutuacao] = useState(true)
@@ -100,11 +105,14 @@ function App() {
   }
 
   async function iniciar() {
+    const id = ++requisicao.current
     setStatus('calculando'); setErro('')
     try {
       const dados = await simularMotor(parametros)
+      if (id !== requisicao.current) return
       setResultado(dados); setIndice(0); setStatus('simulando')
     } catch (e) {
+      if (id !== requisicao.current) return
       setErro(e instanceof Error ? e.message : 'Erro desconhecido.')
       setStatus('erro')
     }
@@ -116,18 +124,19 @@ function App() {
   }
 
   function reiniciar() {
+    requisicao.current += 1
     setResultado(null); setIndice(0); setStatus('pronto'); setErro('')
   }
 
   const textosStatus: Record<Status, string> = {
-    pronto: 'PRONTO PARA PARTIDA', calculando: 'CALCULANDO MODELO', simulando: 'MOTOR EM ACELERAÇÃO',
+    pronto: 'PRONTO PARA PARTIDA', calculando: 'CALCULANDO MODELO', simulando: 'SIMULAÇÃO EM ANDAMENTO',
     pausado: 'SIMULAÇÃO PAUSADA', concluido: 'SIMULAÇÃO CONCLUÍDA', erro: 'REVISE OS PARÂMETROS',
   }
   const desvio = Math.max(
     Math.abs(ponto.corrente - equilibrio.corrente) / Math.max(Math.abs(equilibrio.corrente), 0.1),
     Math.abs(ponto.velocidade - equilibrio.velocidade) / Math.max(Math.abs(equilibrio.velocidade), 1),
   )
-  const explicacao = ponto.tempo < 0.5
+  const explicacao = status === 'pronto' ? 'Escolha os parâmetros e inicie a simulação. Explore as peças para entender as equações.' : ponto.tempo < 0.5
     ? 'A tensão foi aplicada. A corrente começa a produzir torque no rotor.'
     : desvio > 0.18
       ? 'O rotor acelera; a força contraeletromotriz Keω cresce e modifica a corrente.'
@@ -136,11 +145,34 @@ function App() {
   return <div className={`app-shell ${flutuacao ? '' : 'sem-flutuacao'}`}>
     <header className="cabecalho">
       <div className="identidade"><span className="sobretitulo">ENGENHARIA DE COMPUTAÇÃO · EDO</span>
-        <h1>Motor de<br />Corrente Contínua</h1><p>Modelo dinâmico, simulação numérica e visualização tridimensional</p></div>
+        <h1>{tela === 'energia' ? <>Motor de Corrente Contínua</> : <>Do motor à EDO homogênea</>}</h1><p>{tela === 'energia' ? 'Explore a energia que se transforma em movimento' : 'O mesmo experimento, explicado pela matemática'}</p></div>
 
     </header>
 
-    <main className="dashboard">
+
+    <nav className="telas-navegacao" role="tablist" aria-label="Telas do laboratório">
+      <button id="tab-energia" role="tab" aria-selected={tela === 'energia'} aria-controls="tela-energia" onClick={() => setTela('energia')}><span>01</span><div>Motor e energia<small>Funcionamento e exploração 3D</small></div></button>
+      <button id="tab-edo" role="tab" aria-selected={tela === 'edo'} aria-controls="tela-edo" onClick={() => setTela('edo')}><span>02</span><div>EDO homogênea<small>Gráfico, equilíbrio e demonstração</small></div></button>
+    </nav>
+        <div className="dock-holografico painel simulacao-compartilhada">
+        <div className="acoes">
+          <button className="iniciar" onClick={iniciar} disabled={bloqueado}>▶ INICIAR</button>
+          <button onClick={pausar} disabled={status !== 'simulando' && status !== 'pausado'}>{status === 'pausado' ? 'CONTINUAR' : 'PAUSAR'}</button>
+          <button onClick={reiniciar} disabled={status === 'pronto'}>REINICIAR</button>
+          <button className="padrao" onClick={restaurarPadrao} disabled={bloqueado}>RESTAURAR VALORES PADRÃO</button>
+          <button className="alternar-flutuacao" aria-pressed={flutuacao} onClick={() => setFlutuacao(!flutuacao)}>FLUTUAÇÃO {flutuacao ? 'LIGADA' : 'DESLIGADA'}</button>
+        </div>
+        {erro && <p className="erro">{erro}</p>}
+<div className="campos-dock">          <Campo rotulo="Passo numérico" unidade="dt · s" valor={parametros.dt} passo={0.001} disabled={bloqueado} onChange={(v) => alterar('dt', v)} />
+          <Campo rotulo="Duração" unidade="s" valor={parametros.duracao} passo={1} disabled={bloqueado} onChange={(v) => alterar('duracao', v)} />
+</div>
+        <div className="tempo-compartilhado"><span className={`status ${status}`}><i />{textosStatus[status]}</span><label>Tempo simulado
+          <input aria-label="Percorrer tempo da simulação" type="range" min="0" max={Math.max(1, (resultado?.pontos.length ?? 1) - 1)} value={indice} disabled={!resultado || status === 'calculando'}
+            onChange={e => { setIndice(Number(e.target.value)); setStatus('pausado') }} /><output>{ponto.tempo.toFixed(2)} s</output></label>
+          <small>As duas telas compartilham parâmetros, tempo e resultados.</small></div>
+        </div>
+
+    <main className="dashboard tela-energia" id="tela-energia" role="tabpanel" aria-labelledby="tab-energia" hidden={tela !== 'energia'}>
       <aside className="controles painel">
         <div className="titulo-painel"><span>PARÂMETROS</span><i>01</i></div>
         <div className={`estado-edicao ${bloqueado ? 'bloqueado' : ''}`}>
@@ -174,30 +206,39 @@ function App() {
           <div className="cena-cabecalho"><div><span>VISUALIZAÇÃO 3D</span><strong>CORTE TÉCNICO INTERATIVO</strong></div>
             <div className={`status ${status}`}><i />{textosStatus[status]}</div></div>
           <Motor3D rpm={ponto.rpm} corrente={ponto.corrente} torque={ponto.torque}
-            executando={status === 'simulando' || status === 'concluido'} />
-          <div className="legenda-cena esquerda"><span className="ponto cobre" />Bobinas energizadas</div>
-          <div className="legenda-cena direita">Arraste para girar · role para zoom</div>
-          <div className="fluxo-label"><span>FLUXO DE POTÊNCIA</span><strong>{Math.abs(ponto.torque * ponto.velocidade).toFixed(1)} W</strong></div>
+            parametros={parametros} visivel={tela === 'energia'} iniciado={resultado !== null} executando={status === 'simulando' || status === 'concluido'} />
+
         </div>
 
-        <div className="dock-holografico painel">
-        <div className="acoes">
-          <button className="iniciar" onClick={iniciar} disabled={bloqueado}>▶ INICIAR</button>
-          <button onClick={pausar} disabled={status !== 'simulando' && status !== 'pausado'}>{status === 'pausado' ? 'CONTINUAR' : 'PAUSAR'}</button>
-          <button onClick={reiniciar} disabled={status === 'pronto'}>REINICIAR</button>
-          <button className="padrao" onClick={restaurarPadrao} disabled={bloqueado}>RESTAURAR VALORES PADRÃO</button>
-          <button className="alternar-flutuacao" aria-pressed={flutuacao} onClick={() => setFlutuacao(!flutuacao)}>FLUTUAÇÃO {flutuacao ? 'LIGADA' : 'DESLIGADA'}</button>
-        </div>
-        {erro && <p className="erro">{erro}</p>}
-<div className="campos-dock">          <Campo rotulo="Passo numérico" unidade="dt · s" valor={parametros.dt} passo={0.001} disabled={bloqueado} onChange={(v) => alterar('dt', v)} />
-          <Campo rotulo="Duração" unidade="s" valor={parametros.duracao} passo={1} disabled={bloqueado} onChange={(v) => alterar('duracao', v)} />
-</div></div>
+
+      </section>
+
+      <aside className="telemetria painel">
+        <div className="titulo-painel"><span>ESTADO SIMULADO</span><i>02</i></div>
+        <div className="metrica destaque"><span>VELOCIDADE</span><strong>{ponto.rpm.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</strong><small>RPM</small></div>
+        <div className="metrica"><span>CORRENTE</span><strong>{ponto.corrente.toFixed(3)}</strong><small>A</small><div className="barra"><i style={{ width: `${Math.min(Math.abs(ponto.corrente) / 11 * 100, 100)}%` }} /></div></div>
+        <div className="metrica"><span>TORQUE ELETROMAGNÉTICO</span><strong>{ponto.torque.toFixed(3)}</strong><small>N·m</small></div>
+        <div className="metrica"><span>TEMPO SIMULADO</span><strong>{ponto.tempo.toFixed(2)}</strong><small>s</small></div>
+        <div className="equilibrio-card painel"><span>PONTO DE EQUILÍBRIO</span>
+          <dl><div><dt>Corrente</dt><dd>{equilibrio.corrente.toFixed(3)} A</dd></div>
+            <div><dt>Velocidade</dt><dd>{equilibrio.velocidade.toFixed(2)} rad/s</dd></div>
+            <div><dt>Rotação</dt><dd>{equilibrio.rpm.toFixed(0)} RPM</dd></div></dl></div>
+        <div className="explicacao painel"><span>O QUE ESTÁ ACONTECENDO?</span><p>{explicacao}</p></div>
+      </aside>
+      <EnergiaMotor parametros={parametros} ponto={ponto} iniciado={resultado !== null} />
+      <button className="ponte-edo" onClick={() => { setTela('edo'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>Onde está a EDO nesse movimento? <span>Explorar a matemática →</span></button>
+    </main>
+    <main id="tela-edo" role="tabpanel" aria-labelledby="tab-edo" hidden={tela !== 'edo'}>
+      <ExploradorEDO parametros={parametros} equilibrio={equilibrio} ponto={ponto} pontos={pontosVisiveis}
+        todos={resultado?.pontos ?? pontosVisiveis} iniciado={resultado !== null} visivel={tela === 'edo'} />
+      <h2 className="titulo-analise">Análise do mesmo experimento</h2>
         <section className="resultados-holograficos">
         <nav className="abas">
-          {([['graficos', 'GRÁFICOS TEMPORAIS'], ['plano', 'PLANO DE ESTADOS'], ['modelo', 'MODELO MATEMÁTICO'], ['dados', 'DADOS']] as [Aba, string][])
+          {([['graficos', 'GRÁFICOS TEMPORAIS'], ['plano', 'PLANO DE ESTADOS'], ['comparacao', 'COMPARAR CARGAS'], ['modelo', 'MODELO MATEMÁTICO'], ['dados', 'DADOS']] as [Aba, string][])
             .map(([id, nome]) => <button key={id} className={aba === id ? 'ativa' : ''} onClick={() => setAba(id)}>{nome}</button>)}
         </nav>
         <div className="conteudo-aba">
+          {aba === 'comparacao' && <ComparacaoCargas parametros={parametros} />}
           {aba === 'graficos' && <div className="grade-graficos">
             <GraficoTemporal pontos={pontosVisiveis} campo="corrente" titulo="CORRENTE i(t)" unidade="A"
               equilibrio={equilibrio.corrente} cor="#54b5fa" duracao={parametros.duracao} />
@@ -218,20 +259,6 @@ function App() {
               <td>{p.velocidade.toFixed(2)} rad/s</td><td>{p.rpm.toFixed(0)}</td><td>{p.torque.toFixed(3)} N·m</td></tr>)}</tbody></table></div>}
         </div>
         </section>
-      </section>
-
-      <aside className="telemetria painel">
-        <div className="titulo-painel"><span>EM TEMPO REAL</span><i>02</i></div>
-        <div className="metrica destaque"><span>VELOCIDADE</span><strong>{ponto.rpm.toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</strong><small>RPM</small></div>
-        <div className="metrica"><span>CORRENTE</span><strong>{ponto.corrente.toFixed(3)}</strong><small>A</small><div className="barra"><i style={{ width: `${Math.min(Math.abs(ponto.corrente) / 11 * 100, 100)}%` }} /></div></div>
-        <div className="metrica"><span>TORQUE ELETROMAGNÉTICO</span><strong>{ponto.torque.toFixed(3)}</strong><small>N·m</small></div>
-        <div className="metrica"><span>TEMPO SIMULADO</span><strong>{ponto.tempo.toFixed(2)}</strong><small>s</small></div>
-        <div className="equilibrio-card painel"><span>PONTO DE EQUILÍBRIO</span>
-          <dl><div><dt>Corrente</dt><dd>{equilibrio.corrente.toFixed(3)} A</dd></div>
-            <div><dt>Velocidade</dt><dd>{equilibrio.velocidade.toFixed(2)} rad/s</dd></div>
-            <div><dt>Rotação</dt><dd>{equilibrio.rpm.toFixed(0)} RPM</dd></div></dl></div>
-        <div className="explicacao painel"><span>O QUE ESTÁ ACONTECENDO?</span><p>{explicacao}</p></div>
-      </aside>
     </main>
   </div>
 }

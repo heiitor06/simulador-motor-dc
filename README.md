@@ -11,7 +11,7 @@
 
 Consulte [o mapa da estrutura](docs/ESTRUTURA.md) e [o guia de apresentação](docs/guias/Guia_Motor_de_Corrente_Continua.pdf).
 
-Aplicação acadêmica desktop para visualizar o comportamento transitório de um motor de corrente contínua e relacioná-lo a uma equação diferencial homogênea de primeira ordem. O projeto foi criado para a disciplina de Equações Diferenciais Ordinárias do curso de Engenharia de Computação.
+Aplicação acadêmica web e desktop para visualizar o comportamento transitório de um motor de corrente contínua e relacioná-lo a uma equação diferencial homogênea de primeira ordem. O projeto foi criado para a disciplina de Equações Diferenciais Ordinárias do curso de Engenharia de Computação.
 
 Este é um modelo acadêmico simplificado. Ele demonstra princípios matemáticos e computacionais e não substitui ensaios físicos, MATLAB/Simulink, SPICE ou ferramentas industriais.
 
@@ -25,7 +25,7 @@ Este é um modelo acadêmico simplificado. Ele demonstra princípios matemático
 - React Three Fiber + Drei + Three.js
 - Vite
 
-O modo web roda somente no computador local. Ele não utiliza banco de dados, autenticação ou API externa.
+O modo web usa uma API local em Python. Não utiliza banco de dados nem autenticação. A iluminação HDR da Poly Haven está incluída no projeto, com licença CC0, e não precisa de uma conexão externa durante a apresentação.
 
 ## Modelo físico
 
@@ -97,9 +97,11 @@ O projeto implementa diretamente Euler e Runge-Kutta de quarta ordem. RK4 é o p
 ## Interface e gráficos
 
 - motor 3D em corte técnico cuja velocidade visual acompanha `ω`;
-- carcaça transparente, rotor, eixo, bobinas e ventilador modelados no código;
+- modos Realista, Raio-X e Explodido, com carcaça, armadura, bobinas, eixo, escovas e comutador modelados no código;
 - brilho das bobinas relacionado à corrente;
-- fluxo de partículas saindo do eixo relacionado à potência mecânica;
+- névoa discreta na base, apenas como efeito visual de ambiente;
+- seleção de peças com explicações, fórmulas e leituras simuladas;
+- comparação de duas cargas constantes em ensaios independentes;
 - câmera orbitável com rotação e zoom;
 - indicadores de RPM, corrente e torque `Kt·i`;
 - ponto de equilíbrio calculado automaticamente;
@@ -149,3 +151,45 @@ python -m unittest discover -s tests -v
 ```
 
 Os testes cobrem equilíbrio, derivadas, Euler, RK4, convergência, variação de `dt`, ausência de NaN e infinito, validações, condição inicial, controles da interface, gráficos, tabela e animação do rotor.
+
+## Explorador 3D e comparação de cargas
+
+1. Abra a versão web com `executar.cmd` e acesse `http://localhost:8090/`.
+2. Experimente **Realista**, **Raio-X** e **Explodido**. Arraste para girar, role para ampliar e use **Recentrar** para restaurar a câmera.
+3. Clique numa peça ou no seu botão. O painel mostra a função física, a equação relacionada e os valores simulados. No modo Explodido, as peças se afastam em etapas e flutuam suavemente. Ajuste **Afastamento** entre 70% e 130% e use **Pausar flutuação** para estudar os detalhes. A rotação de funcionamento fica suspensa nessa vista; o cálculo temporal não muda. **Recentrar** restaura suavemente posição, alvo e zoom da câmera.
+4. Inicie com os valores padrão para observar o pico de corrente e a aceleração. A rotação 3D é reduzida para ser visível; não corresponde a uma medição real.
+5. Na tela **EDO homogênea**, na aba **COMPARAR CARGAS**, use A = **0,02 N·m** e B = **0,10 N·m**, mantendo os demais parâmetros padrão, RK4, dt = 0,01 s e duração = 12 s. Clique em **Comparar cargas**.
+
+| Ensaio | Corrente aos 12 s | RPM aos 12 s | Corrente de equilíbrio | RPM de equilíbrio |
+|---|---:|---:|---:|---:|
+| A · 0,02 N·m | 3,685 A | 1.590 | 3,571 A | 1.610 |
+| B · 0,10 N·m | 4,250 A | 1.482 | 4,143 A | 1.501 |
+
+As curvas compartilham a mesma escala. A carga maior reduz a velocidade de equilíbrio e exige mais corrente nesses parâmetros. O resultado aos 12 segundos ainda não é exatamente o equilíbrio. A comparação não modifica a carga do motor da cena principal.
+
+Cada ensaio mantém tensão e carga constantes. Deslocar cada equilíbrio para a origem e eliminar o tempo produz a EDO homogênea no plano de estados. A forma com y/x exige x ≠ 0 e dx/dt ≠ 0; a integração temporal continua válida nas tangentes verticais. A origem de cada curva corresponde ao seu próprio equilíbrio físico.
+
+As melhorias usam React Three Fiber/Drei/Three.js já presentes e a iluminação [Studio Small 03 da Poly Haven](https://polyhaven.com/a/studio_small_03). Não há quatro serviços remotos nem telemetria de um motor real. O motor é um modelo didático próprio e não um ativo baixado de terceiros. Créditos e licença: `frontend/public/ambientes/CREDITOS.md`.
+
+
+## Duas telas, um experimento
+
+Os botões no topo alternam entre **Motor e energia** e **EDO homogênea**. A troca preserva parâmetros, resultados, pausa e instante selecionado. Os controles de simulação são compartilhados.
+
+### Roteiro para apresentar
+
+1. Na tela Motor e energia, mantenha os parâmetros padrão e clique em **INICIAR**. O eixo gira e os pulsos ilustram a potência convertida Pconv = Kt·i·ω. O painel distingue alimentação, conversão e potência na carga. A névoa é decorativa; não representa aquecimento.
+2. Abra **EDO homogênea**. A curva reúne corrente e velocidade do mesmo experimento. Use **PAUSAR** ou a barra **Tempo simulado** para examinar qualquer instante calculado; mover a barra pausa a reprodução.
+3. Explore as cinco etapas manualmente ou clique em **Explicação automática**. A explicação avança a cada 9 segundos; esse tempo de apresentação é independente do tempo físico simulado.
+4. Em **Nova origem**, os eixos se deslocam até o equilíbrio. Os pontos físicos permanecem no lugar; suas coordenadas passam a ser x = i − ieq e y = ω − ωeq.
+5. Em **Eliminar o tempo**, veja o quociente das duas derivadas e a forma F(y/x). A relação geométrica homogênea é obtida do sistema original com entradas constantes, não é uma substituição do integrador temporal.
+6. Em **Homogeneidade**, varie **Escala k**. Os pontos P e Q = kP têm a mesma inclinação. O ponto padrão P = (2; −42), com parâmetros padrão, tem inclinação 35,5 (rad/s)/A. Estes são pontos de comparação do campo, não necessariamente pontos da mesma solução temporal.
+7. Abra **Escolher outro ponto P** para explorar inclusive x = 0, tangentes verticais e o equilíbrio. O programa informa onde o quociente não está definido. Abra o detalhe da substituição y = vx para relacionar a demonstração ao método analítico.
+
+Abaixo da explicação continuam os gráficos temporais, plano de estados, comparação de cargas, modelo e dados. O desenho 3D e as animações não alteram os cálculos Python. Na vista explodida, o fluxo no eixo fica oculto para não sugerir um motor desmontado em funcionamento.
+
+Testes adicionais do campo didático (Node.js 24):
+
+```powershell
+node --test tests/edo.test.ts
+```

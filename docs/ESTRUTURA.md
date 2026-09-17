@@ -1,7 +1,7 @@
 # Mapa do projeto
 
 Organização simples por responsabilidade, adequada a um trabalho acadêmico.
-O conteúdo dos códigos existentes foi preservado. Os arquivos de teste foram movidos sem editar seu conteúdo.
+A organização inicial preservou os códigos. O explorador 3D e a comparação foram acrescentados depois, em componentes próprios, sem alterar o núcleo de cálculo Python.
 
 ```text
 simulador-motor-dc/
@@ -9,20 +9,30 @@ simulador-motor-dc/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Motor3D.tsx          # Motor, câmera, iluminação e animação
+│   │   │   ├── ComparacaoCargas.tsx # Ensaios A/B, gráficos e interpretação
+│   │   │   ├── ExploradorEDO.tsx   # Cinco etapas da explicação
+│   │   │   ├── GraficoEDO.tsx      # Translação dos eixos e campo homogêneo
+│   │   │   ├── EnergiaMotor.tsx    # Potências do instante simulado
+│   │   │   ├── motor/              # ModeloMotor, CameraMotor, FluxoEnergia, NevoaBase e pecas
 │   │   │   └── Graficos.tsx         # Gráficos temporais e plano de estados
-│   │   ├── App.tsx                 # Tela principal e controles
+│   │   ├── App.tsx                 # Estado compartilhado entre as duas telas
+│   │   ├── edo.ts                  # Campo dos desvios e validação didática
+│   │   ├── telas.css               # Navegação, energia e explicação guiada
 │   │   ├── main.tsx                # Inicialização do React
 │   │   ├── api.ts                  # Comunicação com o servidor Python
 │   │   ├── types.ts                # Tipos dos parâmetros e resultados
 │   │   ├── styles.css              # Estilos gerais
+│   │   ├── explorador.css          # Modos 3D, inspeção e comparação
 │   │   └── holografico.css         # Visual holográfico e flutuação
-│   ├── public/                    # Imagens utilizadas pelo site
+│   ├── public/                    # Imagens e ambientes/HDR com créditos
 │   ├── index.html                 # Página de entrada
 │   ├── package.json               # Dependências e comandos do frontend
 │   ├── package-lock.json          # Versões das dependências
 │   ├── vite.config.ts             # Configuração de desenvolvimento
 │   └── tsconfig*.json             # Configurações do TypeScript
 ├── tests/
+│   ├── edo.test.ts                # Campo homogêneo e singularidades
+│   ├── test_comparacao_cargas.py   # Interpretação física dos ensaios A/B
 │   ├── test_motor_dc.py            # Modelo físico e métodos numéricos
 │   ├── test_servidor_web.py        # Integração do servidor
 │   └── test_interface.py           # Interface desktop

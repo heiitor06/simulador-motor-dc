@@ -1,0 +1,65 @@
+.cena.painel { height: 680px; overflow: visible; }
+.motor-explorador { position: relative; height: 100%; }
+.modos-motor { position: absolute; top: 35px; left: 0; right: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; z-index: 4; }
+.modos-motor button, .pecas-motor button { border: 1px solid #6594b755; border-radius: 6px; background: #0c2034d9; color: #a9c8df; padding: 9px 12px; font: 11px 'Bahnschrift', 'Segoe UI', sans-serif; transition: background .2s, border-color .2s; }
+.modos-motor button:hover, .pecas-motor button:hover { background: #194464; border-color: #81ccff; }
+.modos-motor button[aria-pressed=true], .pecas-motor button[aria-pressed=true] { color: #e7f8ff; background: #25659488; border-color: #7dccff; box-shadow: 0 0 14px #399bec22; }
+.modos-motor .camera-reset { background: transparent; color: #9ebbd0; }
+.motor-viewport { position: absolute; inset: 80px 0 185px; touch-action: none; }
+.ajustes-explosao { position: absolute; top: 76px; left: 0; right: 0; z-index: 4; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ajustes-explosao label { display: flex; align-items: center; gap: 8px; color: #acc6d9; font: 11px 'Segoe UI', sans-serif; }
+.ajustes-explosao input { width: 90px; accent-color: #79d5ff; cursor: pointer; }
+.ajustes-explosao output { min-width: 32px; color: #e2f5ff; font-variant-numeric: tabular-nums; }
+.ajustes-explosao button { padding: 6px 9px; border: 1px solid #6594b755; border-radius: 6px; background: #0c2034d9; color: #bcdced; font-size: 10px; }
+.ajustes-explosao button:hover { border-color: #81ccff; }
+.vista-explodida .motor-viewport { top: 114px; }
+.explorador-inferior { position: absolute; bottom: 0; left: 0; right: 0; z-index: 4; }
+.instrucao-motor { color: #91b6cf; text-align: center; font: 10px 'Segoe UI', sans-serif; margin: 0 0 10px; }
+.pecas-motor { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-bottom: 10px; }
+.pecas-motor button { font-size: 10px; padding: 7px 9px; }
+.inspecao-peca { min-height: 110px; padding: 13px 15px; border: 1px solid #589aca66; border-radius: 10px; background: linear-gradient(120deg, #102f48dd, #081929e6); }
+.inspecao-peca > div { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.inspecao-peca strong { color: #d5ebfa; font-size: 13px; font-weight: 600; }
+.inspecao-peca span { font-size: 10px; color: #8fbcda; }
+.inspecao-peca code { display: block; color: #e7b580; margin: 8px 0 4px; font-size: 12px; }
+.inspecao-peca p { color: #acc6d9; font-size: 11px; line-height: 1.55; margin: 6px 0 0; }
+.inspecao-peca .credito-ambiente { display: block; font-size: 9px; margin-top: 7px; }
+.comparacao-intro { padding: 23px; }
+.comparacao-cargas h2 { color: #e5f4ff; font: 500 25px 'Bahnschrift', sans-serif; margin: 10px 0; }
+.comparacao-cargas p { font-size: 13px; line-height: 1.65; color: #abc8db; }
+.comparacao-form { display: flex; align-items: end; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
+.comparacao-form label { display: grid; gap: 7px; font-size: 12px; color: #c6e3f6; }
+.comparacao-form input { max-width: 155px; width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #73b1d97a; background: #081b2c; color: white; }
+.comparacao-form button { border-radius: 6px; padding: 11px 20px; border: 1px solid #72d6ed; color: #d6f7ff; background: #245c7488; }
+.comparacao-form button:disabled { opacity: .55; cursor: wait; }
+.comparacao-cargas .config-comparacao { margin: 13px 0 0; font-size: 11px; color: #82a6c0; }
+.legenda-comparacao { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin: 20px 0 12px; font-size: 12px; }
+.legenda-comparacao span:last-child { color: #a2bbce; font-size: 10px; }
+.comparacao-cargas > .comparacao-grafico { margin-top: 12px; }
+.comparacao-cargas .tabela-wrap { margin-top: 15px; }
+.comparacao-cargas caption { text-align: left; padding: 14px; color: #cae4f5; background: #102a40; }
+.explicacao-comparacao { margin-top: 16px; padding: 20px; }
+.explicacao-comparacao h3 { color: #d6eeff; font-weight: 500; margin: 0; }
+.explicacao-comparacao code { color: #f1c491; font-size: 12px; overflow-wrap: anywhere; }
+@media (max-width: 1100px) {
+  .dashboard { grid-template-columns: 220px minmax(0, 1fr) 190px; gap: 12px; }
+  .cena.painel { height: 710px; }
+  .motor-viewport { bottom: 240px; }
+  .inspecao-peca { min-height: 170px; }
+  .abas { justify-content: start; }
+}
+@media (max-width: 850px) {
+  .dashboard { grid-template-columns: 1fr 1fr; }
+  .cena.painel { height: 650px; }
+  .motor-viewport { bottom: 190px; }
+  .inspecao-peca { min-height: 120px; }
+}
+@media (max-width: 480px) {
+  .ajustes-explosao { gap: 6px; }
+  .vista-explodida .motor-viewport { top: 137px; }
+  .dashboard { grid-template-columns: 1fr; }
+  .cena.painel { height: 690px; }
+  .motor-viewport { bottom: 260px; }
+  .inspecao-peca { min-height: 180px; }
+  .modos-motor button { padding: 8px; }
+}
